@@ -65,7 +65,6 @@ export class DepoimentosService {
     const totalDepoimentosOnDb = await this.depoimentosRepo.count({});
     const skipDepoimentos =
       Math.floor(Math.random() * (totalDepoimentosOnDb - 3)) + 1;
-    console.log(skipDepoimentos);
     return this.depoimentosRepo.findMany({
       take: 3,
       skip: skipDepoimentos,
