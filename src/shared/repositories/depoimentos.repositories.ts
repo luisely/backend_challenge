@@ -13,4 +13,16 @@ export class DepoimentosRepository {
   findMany(findMany: Prisma.DepoimentosFindManyArgs) {
     return this.prisma.depoimentos.findMany(findMany);
   }
+
+  findOne(findOne: Prisma.DepoimentosFindUniqueArgs) {
+    return this.prisma.depoimentos.findUnique(findOne);
+  }
+
+  remove(deleteOne: Prisma.DepoimentosDeleteArgs) {
+    return this.prisma.depoimentos.delete(deleteOne);
+  }
+
+  update(updateOne: Prisma.DepoimentosUpdateArgs) {
+    return this.prisma.depoimentos.update(updateOne);
+  }
 }
