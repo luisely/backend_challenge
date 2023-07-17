@@ -1,4 +1,11 @@
+import { IsString, IsNotEmpty } from 'class-validator';
+
 export class CreateDepoimentoDto {
-  nome: string;
-  texto: string;
+  @IsString()
+  @IsNotEmpty()
+  personName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  text: string;
 }
