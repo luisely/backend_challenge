@@ -16,6 +16,7 @@ FROM node:18
 COPY --from=builder /home/node/app/node_modules ./node_modules
 COPY --from=builder /home/node/app/package*.json ./
 COPY --from=builder /home/node/app/dist ./dist
+COPY --from=builder /home/node/app/prisma ./prisma
 
 EXPOSE 3000
-CMD [ "npm", "run", "start:prod" ]
+CMD [  "npm", "run", "start:migrate:prod" ]
