@@ -60,4 +60,16 @@ export class DepoimentosService {
   remove(id: string) {
     return this.depoimentosRepo.remove({ where: { id } });
   }
+
+  async depoimentosHome() {
+    const totalDepoimentosOnDb = await this.depoimentosRepo.count({});
+    const skipDepoimentos =
+      Math.floor(Math.random() * (totalDepoimentosOnDb - 3)) + 1;
+    console.log(skipDepoimentos);
+    return this.depoimentosRepo.findMany({
+      take: 3,
+      skip: skipDepoimentos,
+      distinct: ['personName'],
+    });
+  }
 }

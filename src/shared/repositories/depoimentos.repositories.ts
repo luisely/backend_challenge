@@ -25,4 +25,8 @@ export class DepoimentosRepository {
   update(updateOne: Prisma.DepoimentosUpdateArgs) {
     return this.prisma.depoimentos.update(updateOne);
   }
+
+  count(count: Prisma.DepoimentosCountArgs) {
+    return this.prisma.depoimentos.count(count);
+  }
 }
