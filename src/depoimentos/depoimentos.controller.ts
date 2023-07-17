@@ -6,18 +6,36 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UploadedFile,
+  HttpCode,
+  HttpStatus,
+  ParseFilePipe,
+  Put,
 } from '@nestjs/common';
 import { DepoimentosService } from './depoimentos.service';
 import { CreateDepoimentoDto } from './dto/create-depoimento.dto';
 import { UpdateDepoimentoDto } from './dto/update-depoimento.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { saveToStorage } from './helpers/image-storage';
 
 @Controller('depoimentos')
 export class DepoimentosController {
   constructor(private readonly depoimentosService: DepoimentosService) {}
 
   @Post()
-  create(@Body() createDepoimentoDto: CreateDepoimentoDto) {
-    return this.depoimentosService.create(createDepoimentoDto);
+  @UseInterceptors(FileInterceptor('file', saveToStorage))
+  @HttpCode(HttpStatus.NO_CONTENT)
+  create(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [],
+      }),
+    )
+    file: Express.Multer.File,
+    @Body() createDepoimentoDto: CreateDepoimentoDto,
+  ) {
+    return this.depoimentosService.create(file, createDepoimentoDto);
   }
 
   @Get()
@@ -27,19 +45,26 @@ export class DepoimentosController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.depoimentosService.findOne(+id);
+    return this.depoimentosService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
+  @UseInterceptors(FileInterceptor('file', saveToStorage))
   update(
     @Param('id') id: string,
     @Body() updateDepoimentoDto: UpdateDepoimentoDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [],
+      }),
+    )
+    file: Express.Multer.File,
   ) {
-    return this.depoimentosService.update(+id, updateDepoimentoDto);
+    return this.depoimentosService.update(id, file, updateDepoimentoDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.depoimentosService.remove(+id);
+    return this.depoimentosService.remove(id);
   }
 }

@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateDepoimentoDto } from './dto/create-depoimento.dto';
 import { UpdateDepoimentoDto } from './dto/update-depoimento.dto';
 import { DepoimentosRepository } from 'src/shared/repositories/depoimentos.repositories';
@@ -7,25 +11,53 @@ import { DepoimentosRepository } from 'src/shared/repositories/depoimentos.repos
 export class DepoimentosService {
   constructor(private readonly depoimentosRepo: DepoimentosRepository) {}
 
-  create(createDepoimentoDto: CreateDepoimentoDto) {
-    return this.depoimentosRepo.create({
-      data: createDepoimentoDto,
+  async create(
+    file: Express.Multer.File,
+    createDepoimentoDto: CreateDepoimentoDto,
+  ) {
+    if (!file) {
+      throw new BadRequestException(
+        'invalid file provided, [image files allowed]',
+      );
+    }
+
+    await this.depoimentosRepo.create({
+      data: {
+        avatarUrl: file.filename,
+        ...createDepoimentoDto,
+      },
     });
+
+    return null;
   }
 
   findAll() {
     return this.depoimentosRepo.findMany({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} depoimento`;
+  findOne(id: string) {
+    return this.depoimentosRepo.findOne({ where: { id } });
   }
 
-  update(id: number, updateDepoimentoDto: UpdateDepoimentoDto) {
-    return `This action updates a #${id} depoimento`;
+  async update(
+    id: string,
+    file: Express.Multer.File,
+    updateDepoimentoDto: UpdateDepoimentoDto,
+  ) {
+    const depoimento = await this.findOne(id);
+
+    if (!depoimento) throw new NotFoundException('Depoimento não encontrado');
+
+    return this.depoimentosRepo.update({
+      where: { id },
+      data: {
+        avatarUrl: file.filename,
+        ...updateDepoimentoDto,
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} depoimento`;
+  remove(id: string) {
+    return this.depoimentosRepo.remove({ where: { id } });
   }
 }
