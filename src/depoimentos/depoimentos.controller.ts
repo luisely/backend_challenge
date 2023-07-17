@@ -23,8 +23,8 @@ export class DepoimentosController {
   constructor(private readonly depoimentosService: DepoimentosService) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(FileInterceptor('file', saveToStorage))
-  @HttpCode(HttpStatus.NO_CONTENT)
   create(
     @UploadedFile(
       new ParseFilePipe({
@@ -38,16 +38,19 @@ export class DepoimentosController {
   }
 
   @Get()
+  @HttpCode(HttpStatus.OK)
   findAll() {
     return this.depoimentosService.findAll();
   }
 
   @Get(':id')
+  @HttpCode(HttpStatus.OK)
   findOne(@Param('id') id: string) {
     return this.depoimentosService.findOne(id);
   }
 
   @Put(':id')
+  @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(FileInterceptor('file', saveToStorage))
   update(
     @Param('id') id: string,
@@ -63,6 +66,7 @@ export class DepoimentosController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: string) {
     return this.depoimentosService.remove(id);
   }
