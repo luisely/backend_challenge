@@ -21,14 +21,12 @@ export class DepoimentosService {
       );
     }
 
-    await this.depoimentosRepo.create({
+    return this.depoimentosRepo.create({
       data: {
         avatarUrl: file.filename,
         ...createDepoimentoDto,
       },
     });
-
-    return null;
   }
 
   findAll() {
