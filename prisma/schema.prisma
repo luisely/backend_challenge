@@ -11,7 +11,11 @@ datasource db {
 }
 
 model Depoimentos {
-  id    Int    @id @default(autoincrement())
-  nome  String
-  texto String
+  id         String   @id @default(cuid())
+  personName String
+  avatarUrl  String
+  text       String
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("depoimentos")
 }
