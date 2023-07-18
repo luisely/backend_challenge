@@ -11,12 +11,12 @@ import {
   HttpStatus,
   ParseFilePipe,
   Put,
-} from '@nestjs/common';
-import { DepoimentosService } from './depoimentos.service';
-import { CreateDepoimentoDto } from './dto/create-depoimento.dto';
-import { UpdateDepoimentoDto } from './dto/update-depoimento.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { saveToStorage } from './helpers/image-storage';
+} from '@nestjs/common'
+import { DepoimentosService } from './depoimentos.service'
+import { CreateDepoimentoDto } from './dto/create-depoimento.dto'
+import { UpdateDepoimentoDto } from './dto/update-depoimento.dto'
+import { FileInterceptor } from '@nestjs/platform-express'
+import { saveToStorage } from './helpers/image-storage'
 
 @Controller('depoimentos')
 export class DepoimentosController {
@@ -34,19 +34,19 @@ export class DepoimentosController {
     file: Express.Multer.File,
     @Body() createDepoimentoDto: CreateDepoimentoDto,
   ) {
-    return this.depoimentosService.create(file, createDepoimentoDto);
+    return this.depoimentosService.create(file, createDepoimentoDto)
   }
 
   @Get()
   @HttpCode(HttpStatus.OK)
   findAll() {
-    return this.depoimentosService.findAll();
+    return this.depoimentosService.findAll()
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   findOne(@Param('id') id: string) {
-    return this.depoimentosService.findOne(id);
+    return this.depoimentosService.findOne(id)
   }
 
   @Put(':id')
@@ -62,12 +62,12 @@ export class DepoimentosController {
     )
     file: Express.Multer.File,
   ) {
-    return this.depoimentosService.update(id, file, updateDepoimentoDto);
+    return this.depoimentosService.update(id, file, updateDepoimentoDto)
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('id') id: string) {
-    return this.depoimentosService.remove(id);
+    return this.depoimentosService.remove(id)
   }
 }

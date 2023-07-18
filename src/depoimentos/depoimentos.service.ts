@@ -2,10 +2,10 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
-import { CreateDepoimentoDto } from './dto/create-depoimento.dto';
-import { UpdateDepoimentoDto } from './dto/update-depoimento.dto';
-import { DepoimentosRepository } from 'src/shared/repositories/depoimentos.repositories';
+} from '@nestjs/common'
+import { CreateDepoimentoDto } from './dto/create-depoimento.dto'
+import { UpdateDepoimentoDto } from './dto/update-depoimento.dto'
+import { DepoimentosRepository } from 'src/shared/repositories/depoimentos.repositories'
 
 @Injectable()
 export class DepoimentosService {
@@ -18,7 +18,7 @@ export class DepoimentosService {
     if (!file) {
       throw new BadRequestException(
         'invalid file provided, [image files allowed]',
-      );
+      )
     }
 
     return this.depoimentosRepo.create({
@@ -26,15 +26,15 @@ export class DepoimentosService {
         avatarUrl: file.filename,
         ...createDepoimentoDto,
       },
-    });
+    })
   }
 
   findAll() {
-    return this.depoimentosRepo.findMany({});
+    return this.depoimentosRepo.findMany({})
   }
 
   findOne(id: string) {
-    return this.depoimentosRepo.findOne({ where: { id } });
+    return this.depoimentosRepo.findOne({ where: { id } })
   }
 
   async update(
@@ -42,9 +42,9 @@ export class DepoimentosService {
     file: Express.Multer.File,
     updateDepoimentoDto: UpdateDepoimentoDto,
   ) {
-    const depoimento = await this.findOne(id);
+    const depoimento = await this.findOne(id)
 
-    if (!depoimento) throw new NotFoundException('Depoimento não encontrado');
+    if (!depoimento) throw new NotFoundException('Depoimento não encontrado')
 
     return this.depoimentosRepo.update({
       where: { id },
@@ -52,21 +52,21 @@ export class DepoimentosService {
         avatarUrl: file.filename,
         ...updateDepoimentoDto,
       },
-    });
+    })
   }
 
   remove(id: string) {
-    return this.depoimentosRepo.remove({ where: { id } });
+    return this.depoimentosRepo.remove({ where: { id } })
   }
 
   async depoimentosHome() {
-    const totalDepoimentosOnDb = await this.depoimentosRepo.count({});
+    const totalDepoimentosOnDb = await this.depoimentosRepo.count({})
     const skipDepoimentos =
-      Math.floor(Math.random() * (totalDepoimentosOnDb - 3)) + 1;
+      Math.floor(Math.random() * (totalDepoimentosOnDb - 3)) + 1
     return this.depoimentosRepo.findMany({
       take: 3,
       skip: skipDepoimentos,
       distinct: ['personName'],
-    });
+    })
   }
 }
